@@ -1,0 +1,31 @@
+# Adiciona Caminhao
+POST http://localhost:8080/caminhoes
+Content-type: application/json
+
+{
+  "placa": "GVP-3678",
+  "tipo": "carreta"
+}
+###
+GET http://localhost:8080/caminhoes
+###
+GET http://localhost:8080/caminhoes/944n223
+###
+PUT http://localhost:8080/caminhoes/944n223/embalagens/adicionar
+Content-Type: application/json
+
+{
+  "embalagens": [
+    { "codigo": "3423", "quantidade": 1 },
+    { "codigo": "54234", "quantidade": 2 }
+  ]
+}
+###
+PUT http://localhost:8080/caminhoes/944n223/embalagens/remover
+Content-Type: application/json
+
+{
+  "embalagens": [
+    { "codigo": "54234", "quantidade": 1 }
+  ]
+}

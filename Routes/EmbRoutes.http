@@ -1,0 +1,34 @@
+# Adiciona Embalagem
+POST http://localhost:8080/embalagens
+Content-type: application/json
+
+{
+  "codigo": "8359",
+  "descricao": "pneu",
+  "fornecedores": ["E201", "E202"],
+  "tipo": "Fluxo",
+  "criticalidade": "alta",
+  "altura": 2,
+  "largura": 4,
+  "comprimento": 5
+}
+###
+GET http://localhost:8080/embalagens
+###
+GET http://localhost:8080/embalagens/3423
+###
+PUT http://localhost:8080/embalagens/3423
+Content-Type: application/json
+
+{
+  "descricao" : "gerais",
+  "fornecedores": ["E202"],
+  "tipo" : "fluxo",
+  "criticalidade" : "media",
+  "altura" : 1,
+  "comprimento" : 7,
+  "largura" : 2
+}
+###
+DELETE http://localhost:8080/embalagens/3423
+###

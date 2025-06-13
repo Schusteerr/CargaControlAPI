@@ -1,0 +1,24 @@
+# Adiciona Fornecedor
+POST http://localhost:8080/fornecedores
+Content-type: application/json
+
+{
+  "codigo": "E202",
+  "nome": "MARQUINHOS",
+  "frete": "CIF"
+}
+###
+GET http://localhost:8080/fornecedores
+###
+GET http://localhost:8080/fornecedores/E202
+###
+PUT http://localhost:8080/fornecedores/E201
+Content-Type: application/json
+
+{
+  "nome" : "teste da silva",
+  "frete": "FOB"
+}
+###
+DELETE http://localhost:8080/fornecedores/E201
+###
