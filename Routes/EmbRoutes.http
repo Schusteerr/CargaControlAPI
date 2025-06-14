@@ -17,18 +17,18 @@ GET http://localhost:8080/embalagens
 ###
 GET http://localhost:8080/embalagens/3423
 ###
-PUT http://localhost:8080/embalagens/6754
+PUT http://localhost:8080/embalagens/2321
 Content-Type: application/json
 
 {
   "descricao" : "gerais",
-  "fornecedores": ["E202"],
+  "fornecedores": ["E201"],
   "tipo" : "fluxo",
-  "criticalidade" : "media",
+  "criticalidade" : "baixa",
   "altura" : 1,
   "comprimento" : 7,
   "largura" : 2
 }
 ###
-DELETE http://localhost:8080/embalagens/3423
+DELETE http://localhost:8080/embalagens/
 ###

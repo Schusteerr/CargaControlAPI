@@ -41,7 +41,7 @@ public class EmbalagemService {
             throw new RuntimeException("Tipo inválido. Apenas 'fluxo' ou 'standard' são permitidos.");
         }
 
-        // Validação da criticalidade da embalagem
+
         if (!"baixa".equalsIgnoreCase(dto.criticalidade()) &&
                 !"media".equalsIgnoreCase(dto.criticalidade()) &&
                 !"alta".equalsIgnoreCase(dto.criticalidade())) {
@@ -73,13 +73,13 @@ public class EmbalagemService {
         );
 
         var embalagemSalva = repository.save(entity);
-        logger.info("Embalagem criada com sucesso: {}", embalagemSalva.getCodigo()); // logger
+        logger.info("Embalagem criada com sucesso: {}", embalagemSalva.getCodigo());
         return embalagemSalva.getCodigo();
     }
 
     public List<EmbalagemListDTO> listarTodas() {
         List<Embalagem> embalagens = repository.findAll();
-        logger.info("Listando todas as embalagens. Total: {}", embalagens.size()); // logger
+        logger.info("Listando todas as embalagens. Total: {}", embalagens.size());
 
         return embalagens.stream()
                 .map(e -> new EmbalagemListDTO(
@@ -93,6 +93,7 @@ public class EmbalagemService {
     }
 
     public Embalagem listarPorCodigo(String codigoEmbalagem) {
+
         return repository.findById(codigoEmbalagem)
                 .orElseThrow(() -> {
                     logger.error("Embalagem com código {} não encontrada", codigoEmbalagem);
@@ -101,18 +102,32 @@ public class EmbalagemService {
     }
 
     public void deletarEmbalagem(String codigoEmbalagem) {
+
         if (!repository.existsById(codigoEmbalagem)) {
-            logger.error("Tentativa de deletar embalagem inexistente: {}", codigoEmbalagem); // 🔧
+            logger.error("Tentativa de deletar embalagem inexistente: {}", codigoEmbalagem);
             throw new RuntimeException("Embalagem com código " + codigoEmbalagem + " não encontrada.");
         }
+
         repository.deleteById(codigoEmbalagem);
     }
 
     public Embalagem atualizarEmbalagem(String codigoEmbalagem, EmbalagemUpdateDTO dto) {
 
+        if (!"fluxo".equalsIgnoreCase(dto.tipo()) && !"standard".equalsIgnoreCase(dto.tipo())) {
+            logger.error("Tipo inválido. Apenas 'fluxo' ou 'standard' são permitidos.");
+            throw new RuntimeException("Tipo inválido. Apenas 'fluxo' ou 'standard' são permitidos.");
+        }
+
+        if (!"baixa".equalsIgnoreCase(dto.criticalidade()) &&
+                !"media".equalsIgnoreCase(dto.criticalidade()) &&
+                !"alta".equalsIgnoreCase(dto.criticalidade())) {
+            logger.error("Criticalidade inválida. Apenas 'baixa', 'media' ou 'alta' são permitidas.");
+            throw new RuntimeException("Criticalidade inválida. Apenas 'baixa', 'media' ou 'alta' são permitidas.");
+        }
+
         Embalagem embalagemExistente = repository.findById(codigoEmbalagem)
                 .orElseThrow(() -> {
-                    logger.error("Embalagem com código {} não encontrada para atualização", codigoEmbalagem); // 🔧
+                    logger.error("Embalagem com código {} não encontrada para atualização", codigoEmbalagem);
                     return new RuntimeException("Embalagem com código " + codigoEmbalagem + " não encontrada.");
                 });
         embalagemExistente.setDescricao(dto.descricao());
@@ -120,7 +135,7 @@ public class EmbalagemService {
         Set<Fornecedor> fornecedores = dto.fornecedores().stream()
                 .map(id -> fornecedorRepository.findById(id)
                         .orElseThrow(() -> {
-                            logger.error("Fornecedor com id {} não encontrado durante atualização", id); // 🔧
+                            logger.error("Fornecedor com id {} não encontrado durante atualização", id);
                             return new RuntimeException("Fornecedor com id " + id + " não encontrado");
                         }))
                 .collect(Collectors.toSet());
