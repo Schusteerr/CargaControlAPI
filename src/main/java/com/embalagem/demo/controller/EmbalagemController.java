@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -22,38 +23,58 @@ public class EmbalagemController{
     }
 
     @PostMapping
-    public ResponseEntity<Embalagem> criarEmbalagem(@RequestBody EmbalagemDTO embalagemDTO) {
+    public ResponseEntity<String> criarEmbalagem(@RequestBody EmbalagemDTO embalagemDTO) {
         try {
             var embalagemCodigo = service.createEmbalagem(embalagemDTO);
-            return ResponseEntity.created(URI.create("/embalagens/" + embalagemCodigo.toString())).build();
+            return ResponseEntity.created(URI.create("/embalagens/" + embalagemCodigo.toString())).body("Embalagem " + embalagemDTO.codigo() + " criada com sucesso!");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Erro ao criar embalagem: " + e.getMessage());
         }
     }
 
 
     @GetMapping
     public ResponseEntity<List<EmbalagemListDTO>> listarEmbalagens() {
-        var embalagens = service.listarTodas();
-        return ResponseEntity.ok(embalagens);
+        try{
+            var embalagens = service.listarTodas();
+            return ResponseEntity.ok(embalagens);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ArrayList<EmbalagemListDTO>());
+        }
+
     }
 
     @GetMapping("/{codigoEmbalagem}")
     public ResponseEntity<Embalagem> listarPorCodigo(@PathVariable("codigoEmbalagem") String codigoEmbalagem) {
-        var embalagem = service.listarPorCodigo(codigoEmbalagem);
-        return ResponseEntity.ok(embalagem);
+        try {
+            var embalagem = service.listarPorCodigo(codigoEmbalagem);
+            return ResponseEntity.ok(embalagem);
+        }  catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+
     }
 
     @DeleteMapping("/{codigoEmbalagem}")
-    public ResponseEntity<Void> deletarEmbalagem(@PathVariable("codigoEmbalagem") String codigoEmbalagem) {
-        service.deletarEmbalagem(codigoEmbalagem);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<String> deletarEmbalagem(@PathVariable("codigoEmbalagem") String codigoEmbalagem) {
+        try {
+            service.deletarEmbalagem(codigoEmbalagem);
+            return ResponseEntity.ok("Embalagem deletada com sucesso!");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Erro ao tentar deletar embalagem: " + e.getMessage());
+        }
+
     }
 
     @PutMapping("/{codigoEmbalagem}")
-    public ResponseEntity<Embalagem> atualizarEmbalagem(@PathVariable("codigoEmbalagem") String codigoEmbalagem,
+    public ResponseEntity<String> atualizarEmbalagem(@PathVariable("codigoEmbalagem") String codigoEmbalagem,
                                                         @RequestBody EmbalagemUpdateDTO dto) {
-        var embalagemAtualizada = service.atualizarEmbalagem(codigoEmbalagem, dto);
-        return ResponseEntity.ok(embalagemAtualizada);
+        try {
+            var embalagemAtualizada = service.atualizarEmbalagem(codigoEmbalagem, dto);
+            return ResponseEntity.ok("Embalagem atualizada com sucesso!");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Erro ao tentar atualizar embalagem: " + e.getMessage());
+        }
+
     }
 }
