@@ -39,7 +39,8 @@ public class CaminhaoService {
         }
 
         if (!"3/4".equalsIgnoreCase(dto.tipo()) && !"truck".equalsIgnoreCase(dto.tipo()) && !"carreta".equalsIgnoreCase(dto.tipo())) {
-            throw new RuntimeException("Caminhao invalido");
+            logger.error("Tipo de caminhao não encontrado");
+            throw new RuntimeException("Tipo inexistente");
         }
 
         Caminhao caminhao = new Caminhao();
@@ -55,6 +56,7 @@ public class CaminhaoService {
     }
 
     private double calcularVolumePorTipo(String tipo) {
+
         return switch (tipo.toLowerCase()) {
             case "3/4" -> 2.1 * 2.2 * 5.1;
             case "truck" -> 2.9 * 2.4 * 7.8;
@@ -70,14 +72,15 @@ public class CaminhaoService {
 
     public Caminhao listarPorId(String codigoCaminhao){
         return repository.findById(codigoCaminhao)
-                .orElseThrow(() -> new RuntimeException("Fornecedor com código " + codigoCaminhao + " não encontrado"));
+                .orElseThrow(() -> new RuntimeException("Caminhão com a placa " + codigoCaminhao + " não encontrado"));
     }
 
     @Transactional
     public Caminhao atualizarEmbalagens(String codigoCaminhao, EmbalagemQuantidadeDTO dto) {
-
         Caminhao caminhao = repository.findById(codigoCaminhao)
                 .orElseThrow(() -> new RuntimeException("Caminhão com placa " + codigoCaminhao + " não encontrado"));
+            logger.error("Placa do caminhão inexistente");
+
 
         for (CacambaDTO item : dto.embalagens()) {
             String codigoEmbalagem = item.codigo();
@@ -85,10 +88,12 @@ public class CaminhaoService {
 
             Embalagem embalagem = embalagemRepository.findById(codigoEmbalagem)
                     .orElseThrow(() -> new RuntimeException("Embalagem com código " + codigoEmbalagem + " não encontrada"));
+            logger.error("Código da embalagem inexistente");
 
             double volumeAdicional = embalagem.getVolume() * quantidade;
 
             if (caminhao.getVolumeOcupado() + volumeAdicional > caminhao.getVolumeMaximo()) {
+                logger.error("Volume do caminhão excedido");
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                         "Não é possível adicionar a embalagem " + codigoEmbalagem +
                                 " (quantidade: " + quantidade + ") por exceder o volume do caminhão.");
@@ -105,12 +110,18 @@ public class CaminhaoService {
         Caminhao caminhao = repository.findById(codigoCaminhao)
                 .orElseThrow(() -> new RuntimeException("Caminhão com placa " + codigoCaminhao + " não encontrado"));
 
+        if (!repository.existsById(codigoCaminhao)) {
+            logger.error("Código inexistente");
+            throw new RuntimeException("Não foi possível remover a embalagem, " + codigoCaminhao + " não encontrado");
+        }
+
         for (CacambaDTO item : dto.embalagens()) {
             String codigoEmbalagem = item.codigo();
             int quantidade = item.quantidade();
 
             Embalagem embalagem = embalagemRepository.findById(codigoEmbalagem)
                     .orElseThrow(() -> new RuntimeException("Embalagem com código " + codigoEmbalagem + " não encontrada"));
+            logger.error("Código da embalagem inexistente");
 
             caminhao.removerEmbalagem(embalagem, quantidade);
         }
