@@ -12,7 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -21,6 +22,8 @@ public class CaminhaoService {
 
     private final CaminhaoRepository repository;
     private final EmbalagemRepository embalagemRepository;
+
+    private static final Logger logger = LoggerFactory.getLogger(EmbalagemService.class);
 
     @Autowired
     public CaminhaoService(CaminhaoRepository repository, EmbalagemRepository embalagemRepository) {
@@ -31,7 +34,12 @@ public class CaminhaoService {
     public Caminhao criarCaminhao(CaminhaoDTO dto) {
 
         if (repository.existsById(dto.placa())) {
+            logger.error("Caminhao j<UNK> existente");
             throw new RuntimeException("Já existe um caminhão com a placa: " + dto.placa());
+        }
+
+        if (!"3/4".equalsIgnoreCase(dto.tipo()) && !"truck".equalsIgnoreCase(dto.tipo()) && !"carreta".equalsIgnoreCase(dto.tipo())) {
+            throw new RuntimeException("Caminhao invalido");
         }
 
         Caminhao caminhao = new Caminhao();

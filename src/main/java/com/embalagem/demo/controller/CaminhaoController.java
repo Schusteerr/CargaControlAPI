@@ -19,9 +19,13 @@ public class CaminhaoController {
     }
 
     @PostMapping
-    public ResponseEntity<Caminhao> criarCaminhao(@RequestBody CaminhaoDTO dto) {
-        Caminhao caminhao = service.criarCaminhao(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(caminhao);
+    public ResponseEntity<String> criarCaminhao(@RequestBody CaminhaoDTO dto) {
+        try {
+            Caminhao caminhao = service.criarCaminhao(dto);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Caminhao "+ dto.placa() + " cadastrado com sucesso!");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Erro ao criar caminhao" + e.getMessage());
+        }
     }
 
     @GetMapping
