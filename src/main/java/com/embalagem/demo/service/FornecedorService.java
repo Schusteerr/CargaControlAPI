@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-
 @Service
 public class FornecedorService {
 
@@ -30,12 +29,19 @@ public class FornecedorService {
                              EmbalagemRepository embalagemRepository) {
         this.repository = fornecedorRepository;
         this.embalagemRepository = embalagemRepository;
-    }
+         }
     private static final Logger logger = LoggerFactory.getLogger(FornecedorService.class);
 
 
     public String criarFornecedor (FornecedorDTO dto){
 
+        if (repository.existsById(dto.codigo())){
+            logger.error("o codigo informado ja existe no banco de dados!");
+            throw new RuntimeException("Fornecedor ja existe!");
+        }
+        if(!"cif".equalsIgnoreCase(dto.frete())&& !"fob".equalsIgnoreCase(dto.frete())&& !"cargolift".equalsIgnoreCase(dto.frete())) {
+            throw new RuntimeException("tipo de frete invalido");
+        }
         var entity = new Fornecedor(dto.codigo(), dto.nome(), dto.frete());
 
         var userSaved = repository.save(entity);
@@ -48,11 +54,18 @@ public class FornecedorService {
 
     public Fornecedor listarPorCodigo(String codigoFornecedor) {
         return repository.findById(codigoFornecedor)
-                .orElseThrow(() -> new RuntimeException("Fornecedor com código " + codigoFornecedor + " não encontrado"));
+                .orElseThrow(() -> {
+                    new RuntimeException("Fornecedor com código " + codigoFornecedor + " não encontrado");
+                    logger.error("Fornecedor com código não encontrado");
+                    return null;
+                });
     }
 
     public void deletarFornecedor(String codigoFornecedor) {
 
+        if(!repository.existsById(codigoFornecedor)){
+            throw new RuntimeException("Fornecedor com código " + codigoFornecedor + " não encontrado");
+        }
         Fornecedor fornecedor = repository.findById(codigoFornecedor)
                 .orElseThrow(() -> new EntityNotFoundException("Fornecedor não encontrado"));
 
@@ -68,28 +81,30 @@ public class FornecedorService {
 
         if (!bloqueios.isEmpty()) {
             logger.warn("Tentativa de exclusão de fornecedor bloqueada. Vinculado exclusivamente às embalagens: {}", bloqueios);
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    "Fornecedor não pode ser removido pois está vinculado exclusivamente às embalagens: " + bloqueios);
+            throw new RuntimeException("Fornecedor não pode ser removido pois está vinculado exclusivamente às embalagens: " + bloqueios);
         }
-
 
         for (Embalagem embalagem : embalagens) {
             embalagem.getFornecedores().remove(fornecedor);
             embalagemRepository.save(embalagem);
         }
-
         repository.delete(fornecedor);
     }
-
 
     public Fornecedor atualizarFornecedor(String codigoFornecedor, FornecedorUpdateDTO dto) {
 
         Fornecedor fornecedorExistente = repository.findById(codigoFornecedor)
                 .orElseThrow(() -> new RuntimeException("Fornecedor com código " + codigoFornecedor + " não encontrado."));
 
-        fornecedorExistente.setNome(dto.nome());
-        fornecedorExistente.setFrete(dto.frete());
-
+        if(dto.nome() != null) {
+            fornecedorExistente.setNome(dto.nome());
+        }
+        if(dto.frete() != null) {
+            if(!"cif".equalsIgnoreCase(dto.frete())&& !"fob".equalsIgnoreCase(dto.frete())&& !"cargolift".equalsIgnoreCase(dto.frete())) {
+                throw new RuntimeException("tipo de frete invalido");
+            }
+            fornecedorExistente.setFrete(dto.frete());
+        }
         return repository.save(fornecedorExistente);
     }
 }
