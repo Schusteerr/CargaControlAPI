@@ -25,7 +25,7 @@ public class CaminhaoController {
             Caminhao caminhao = service.criarCaminhao(dto);
             return ResponseEntity.status(HttpStatus.CREATED).body("Caminhao "+ dto.placa() + " cadastrado com sucesso!");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Erro ao criar caminhao" + e.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Erro ao criar caminhão: " + e.getMessage());
         }
     }
 
@@ -55,7 +55,7 @@ public class CaminhaoController {
             @RequestBody EmbalagemQuantidadeDTO dto) {
         try {
             Caminhao atualizado = service.atualizarEmbalagens(codigoCaminhao, dto);
-            return ResponseEntity.ok("Carga adicionada com sucesso");
+            return ResponseEntity.ok("Carga adicionada com sucesso.");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Erro ao adicionar carga: " + e.getMessage());
         }
@@ -66,7 +66,7 @@ public class CaminhaoController {
             @RequestBody EmbalagemQuantidadeDTO dto) {
         try {
             Caminhao atualizado = service.removerEmbalagens(codigoCaminhao, dto);
-            return ResponseEntity.ok("Carga removida com sucesso");
+            return ResponseEntity.ok("Carga removida com sucesso.");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Erro ao remover carga: " + e.getMessage());
         }

@@ -23,7 +23,7 @@ public class EmbalagemService {
     private static final Logger logger = LoggerFactory.getLogger(EmbalagemService.class);
 
     private final EmbalagemRepository repository;
-    private final FornecedorRepository fornecedorRepository;  // <---- injete o repo
+    private final FornecedorRepository fornecedorRepository;
 
     public EmbalagemService(EmbalagemRepository repository, FornecedorRepository fornecedorRepository) {
         this.repository = repository;
@@ -53,7 +53,7 @@ public class EmbalagemService {
         Set<Fornecedor> fornecedores = dto.fornecedores().stream()
                 .map(codigo -> fornecedorRepository.findById(codigo)
                         .orElseThrow(() -> {
-                            logger.error("Fornecedor não encontrado: {}", codigo); // logger
+                            logger.error("Fornecedor não encontrado: {}", codigo);
                             return new RuntimeException("Fornecedor não encontrado: " + codigo);
                         })
                 )

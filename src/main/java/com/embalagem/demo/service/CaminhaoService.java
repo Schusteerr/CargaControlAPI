@@ -34,8 +34,8 @@ public class CaminhaoService {
     public Caminhao criarCaminhao(CaminhaoDTO dto) {
 
         if (repository.existsById(dto.placa())) {
-            logger.error("Caminhao j<UNK> existente");
-            throw new RuntimeException("Já existe um caminhão com a placa: " + dto.placa());
+            logger.error("Caminhao com a placa {} já existente", dto.placa());
+            throw new RuntimeException("Já existe um caminhão cadastrado com a placa: " + dto.placa());
         }
 
         if (!"3/4".equalsIgnoreCase(dto.tipo()) && !"truck".equalsIgnoreCase(dto.tipo()) && !"carreta".equalsIgnoreCase(dto.tipo())) {

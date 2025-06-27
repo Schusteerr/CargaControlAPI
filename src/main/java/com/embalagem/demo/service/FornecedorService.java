@@ -10,9 +10,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,11 +34,11 @@ public class FornecedorService {
     public String criarFornecedor (FornecedorDTO dto){
 
         if (repository.existsById(dto.codigo())){
-            logger.error("o codigo informado ja existe no banco de dados!");
-            throw new RuntimeException("Fornecedor ja existe!");
+            logger.error("Fornecedor com o código {} já cadastrado", dto.codigo());
+            throw new RuntimeException("Fornecedor com o codigo " + dto.codigo() +" ja cadastrado.");
         }
         if(!"cif".equalsIgnoreCase(dto.frete())&& !"fob".equalsIgnoreCase(dto.frete())&& !"cargolift".equalsIgnoreCase(dto.frete())) {
-            throw new RuntimeException("tipo de frete invalido");
+            throw new RuntimeException("Tipo de frete invalido\nApenas são aceitos: 'cif', 'fob' ou 'cargolift'.");
         }
         var entity = new Fornecedor(dto.codigo(), dto.nome(), dto.frete());
 
@@ -56,16 +54,13 @@ public class FornecedorService {
         return repository.findById(codigoFornecedor)
                 .orElseThrow(() -> {
                     new RuntimeException("Fornecedor com código " + codigoFornecedor + " não encontrado");
-                    logger.error("Fornecedor com código não encontrado");
+                    logger.error("Fornecedor com código {} não encontrado", codigoFornecedor);
                     return null;
                 });
     }
 
     public void deletarFornecedor(String codigoFornecedor) {
 
-        if(!repository.existsById(codigoFornecedor)){
-            throw new RuntimeException("Fornecedor com código " + codigoFornecedor + " não encontrado");
-        }
         Fornecedor fornecedor = repository.findById(codigoFornecedor)
                 .orElseThrow(() -> new EntityNotFoundException("Fornecedor não encontrado"));
 
@@ -101,7 +96,7 @@ public class FornecedorService {
         }
         if(dto.frete() != null) {
             if(!"cif".equalsIgnoreCase(dto.frete())&& !"fob".equalsIgnoreCase(dto.frete())&& !"cargolift".equalsIgnoreCase(dto.frete())) {
-                throw new RuntimeException("tipo de frete invalido");
+                throw new RuntimeException("Tipo de frete invalido\nApenas são aceitos: 'cif', 'fob' ou 'cargolift'.");
             }
             fornecedorExistente.setFrete(dto.frete());
         }
