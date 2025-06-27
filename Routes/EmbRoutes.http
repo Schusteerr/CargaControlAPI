@@ -3,19 +3,19 @@ POST http://localhost:8080/embalagens
 Content-type: application/json
 
 {
-  "codigo": "2321",
-  "descricao": "arroz",
-  "fornecedores": ["E201"],
+  "codigo": "1234",
+  "descricao": "peças",
+  "fornecedores": ["E13"],
   "tipo": "FLUXO",
   "criticalidade": "BAIXA",
   "altura": 2,
-  "largura": 4,
-  "comprimento": 5
+  "largura": 2,
+  "comprimento": 2
 }
 ###
 GET http://localhost:8080/embalagens
 ###
-GET http://localhost:8080/embalagens/3423
+GET http://localhost:8080/embalagens/1234
 ###
 PUT http://localhost:8080/embalagens/2321
 Content-Type: application/json

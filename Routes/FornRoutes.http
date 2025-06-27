@@ -3,9 +3,9 @@ POST http://localhost:8080/fornecedores
 Content-type: application/json
 
 {
-  "codigo": "E201",
-  "nome": "MARQUINHOS",
-  "frete": "CIF"
+  "codigo": "E14",
+  "nome": "andre",
+  "frete": "FIB"
 }
 ###
 GET http://localhost:8080/fornecedores

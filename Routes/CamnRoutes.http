@@ -3,21 +3,20 @@ POST http://localhost:8080/caminhoes
 Content-type: application/json
 
 {
-  "placa": "GVP-3678",
-  "tipo": "carreta"
+  "placa": "GVP-3672",
+  "tipo": "3/4"
 }
 ###
 GET http://localhost:8080/caminhoes
 ###
-GET http://localhost:8080/caminhoes/944n223
+GET http://localhost:8080/caminhoes/GVP-3672
 ###
-PUT http://localhost:8080/caminhoes/944n223/embalagens/adicionar
+PUT http://localhost:8080/caminhoes/GVP-3672/embalagens/adicionar
 Content-Type: application/json
 
 {
   "embalagens": [
-    { "codigo": "3423", "quantidade": 1 },
-    { "codigo": "54234", "quantidade": 2 }
+    { "codigo": "1234", "quantidade": 2 }
   ]
 }
 ###
@@ -26,6 +25,6 @@ Content-Type: application/json
 
 {
   "embalagens": [
-    { "codigo": "54234", "quantidade": 1 }
+    { "codigo": "2321", "quantidade": 1 }
   ]
 }
