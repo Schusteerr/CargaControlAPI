@@ -16,7 +16,7 @@ public class Fornecedor {
     private String nome;
 
     @Column(name = "frete", nullable = false)
-    private String frete; // lembrar que é CIF ou FOB
+    private String frete;
 
     public Fornecedor() {
     }

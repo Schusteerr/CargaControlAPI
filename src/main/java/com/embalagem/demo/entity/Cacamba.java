@@ -18,8 +18,7 @@ public class Cacamba {
     private Embalagem embalagem;
 
     @Column(nullable = false)
-    private int quantidade;  // | PLACA  | EMBALAGEM | QUANTIDADE |
-                            //  | 1089   |  4892     |     3      | for : volumeOcupado += embalagem.getVolume * quantidade
+    private int quantidade;
 
     public Cacamba() {}
 

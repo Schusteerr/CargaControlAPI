@@ -5,7 +5,7 @@ import jakarta.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Objects;
 
-@Embeddable //id personalizado (que provem de 2 itens)
+@Embeddable
 public class CacambaId implements Serializable {
 
     private String caminhaoPlaca;

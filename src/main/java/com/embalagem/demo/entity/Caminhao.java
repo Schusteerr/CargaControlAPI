@@ -13,14 +13,13 @@ public class Caminhao {
     private String placa;
 
     @Column(nullable = false)
-    private String tipo; // "3/4", "truck", "carreta"
+    private String tipo;
 
     @Column(nullable = false)
     private double volumeMaximo;
 
     @OneToMany(mappedBy = "caminhao", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Cacamba> caminhaoEmbalagens = new HashSet<>();      // | PLACA  | EMBALAGEM | QUANTIDADE |
-                                                                    // | 1089   |  4892     |     3      | for : volumeOcupado += embalagem.getVolume * quantidade
+    private Set<Cacamba> caminhaoEmbalagens = new HashSet<>();
 
     @ManyToMany
     @JoinTable(

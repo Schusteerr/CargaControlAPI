@@ -3,20 +3,20 @@ POST http://localhost:8080/caminhoes
 Content-type: application/json
 
 {
-  "placa": "GVP-3672",
-  "tipo": "3/4"
+  "placa": "MUW-7896",
+  "tipo": "carreta"
 }
 ###
 GET http://localhost:8080/caminhoes
 ###
 GET http://localhost:8080/caminhoes/GVP-3672
 ###
-PUT http://localhost:8080/caminhoes/GVP-3672/embalagens/adicionar
+PUT http://localhost:8080/caminhoes/MUW-7896/embalagens/adicionar
 Content-Type: application/json
 
 {
   "embalagens": [
-    { "codigo": "1234", "quantidade": 2 }
+    { "codigo": "4321", "quantidade": 5 }
   ]
 }
 ###

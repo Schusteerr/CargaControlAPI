@@ -3,11 +3,11 @@ POST http://localhost:8080/embalagens
 Content-type: application/json
 
 {
-  "codigo": "1234",
-  "descricao": "peças",
-  "fornecedores": ["E13"],
-  "tipo": "FLUXO",
-  "criticalidade": "BAIXA",
+  "codigo": "4321",
+  "descricao": "peças de engate",
+  "fornecedores": ["E022"],
+  "tipo": "STANDARD",
+  "criticalidade": "MEDIA",
   "altura": 2,
   "largura": 2,
   "comprimento": 2
