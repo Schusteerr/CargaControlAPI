@@ -40,7 +40,7 @@ Projeto backend para simular o carregamento de embalagens em caminhões, respeit
 ### 1️⃣ Clone o Repositório
 
 ```bash
-git clone https://github.com/Schusteerr/CargoManagerAPI.git
+git clone https://github.com/Schusteerr/CargaControlAPI.git
 cd CargoManagerAPI
 ```
 
